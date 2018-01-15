@@ -1,1 +1,4 @@
-# PS3-2017--ProyectoSegundoParcial
+# PS3-2017--
+AUTORES:
+*Ivan Cedeño
+*Oswaldo Aguilr
