@@ -20,6 +20,6 @@ void print_ht(Hasht *h_t);
 void *get_ht(Hasht *t, char* c);
 void *remove_ht(Hasht *t, char *c);
 void destroy_ht(Hasht *t);
-void write_ht(Hasht *ht, char * filename, int modified);
+void write_ht(Hasht *ht, char * filename);
 
 #endif

@@ -6,6 +6,9 @@ lib/hash_ps3.a: obj/hash_table.o include/hash_table.h
 	mkdir -p lib
 	ar rcs lib/hash_ps3.a obj/hash_table.o
 
+obj/config_reader.o: src/config_reader.c include/config_reader.h
+	mkdir -p obj
+	gcc -Wall -O2 -c src/config_reader.c -I./include -o $@
 
 obj/csapp.o: src/csapp.c include/csapp.h
 	mkdir -p obj
@@ -18,8 +21,8 @@ obj/client.o: src/client.c
 	mkdir -p obj
 	gcc -Wall -O2 -c $^ -o $@ -I./include
 	
-server: lib/hash_ps3.a obj/server.o obj/csapp.o 
-	gcc -Wall -O2 obj/server.o obj/csapp.o lib/hash_ps3.a -o $@ -lpthread
+server: obj/server.o obj/csapp.o obj/config_reader.o lib/hash_ps3.a 
+	gcc -Wall -O2 $^ -o $@ -lpthread
 
 obj/server.o: src/server.c
 	mkdir -p obj

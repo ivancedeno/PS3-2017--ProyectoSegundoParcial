@@ -144,6 +144,9 @@ void *get_ht(Hasht *t, char *c){
 void *remove_ht(Hasht *h_t, char *c){
 	unsigned int i =hash_code(c,h_t->size);
 	ENTRY *f=h_t->table[i];
+	if(f==NULL){
+		return NULL;
+	}
 	const int r = strcmp(f->data,c);
 	char *n = NULL;
 	if(r!=0){
@@ -159,7 +162,8 @@ void *remove_ht(Hasht *h_t, char *c){
 				f->next=NULL;
 			}
 			h_t->n_size--;
-			free(b->data);
+			
+			n=(b->data);
 			free(b);
 		}
 	}else if(r==0){
@@ -170,7 +174,7 @@ void *remove_ht(Hasht *h_t, char *c){
 			h_t->table[i]=NULL;
 		}
 		h_t->n_size--;
-		free(f->data);
+		n = (f->data);
 		free(f);
 	}
 	return n;
@@ -222,10 +226,8 @@ ENTRY* getNext(Hasht * ht, ENTRY *en, int *current){
 
 }
 
-void write_ht(Hasht *ht, char * filename, int modified){
+void write_ht(Hasht *ht, char * filename){
 	int current=0;
-	if(!modified)
-		return;
 	umask(S_IWGRP|S_IWOTH);
 	FILE *f = fopen(filename,"w");
 	if(f==NULL){
