@@ -2,11 +2,19 @@
 #include <ctype.h>
 #include <unistd.h>
 
-
+/*
+definiciones solo para no escribir las palabras completas
+*/
 #define GET "GET "
 #define IST "INSERT "
 #define RM "REMOVE "
+/*
+funcion para validar quelo ingresado sea alguna operacion valida
+luego se mueve el puntero para verificar que lo que le sigue es una key
+de 6 caracteres alfanumericos y luego que se encuentre el caracter
+de salto de linea
 
+*/
 int val_input(char *c){
     if(strncmp(c,GET,strlen(GET))==0){
         c+=strlen(GET);
@@ -25,6 +33,17 @@ int val_input(char *c){
     return c[6]=='\n';
 }
 
+
+/*
+para validar que se ingreso una ip valida
+la ip tiene 3 puntos peroen esta validacion se aumenta 1
+por conveniencia de la validacion
+la variable ip representa un array que contiene arrays
+para poder representar cada numero como char por separado
+n es la cantidad de digitos leidos separado por puntos
+siempre debe ser entre 1 y 3
+
+*/
 int val_ip(char *c){
     if(strcmp(c,"localhost\n")==0){
         return 1;
@@ -75,11 +94,20 @@ int main(int argc, char **argv)
     char host[18], buf[15];
     char port[5];
     port[0]='\0';
-
+    /*
+    variables para guardar al host, un buffer para guardar lo que
+    escribe el usuario y el puerto*/
     while((opt=getopt(argc,argv,"s:p:"))!=-1){
         switch(opt){
             case 's':
                 strcpy(host,optarg);
+                /*
+                en la validacionse toma en cuenta el \n ya que se estaba ingresando
+                por teclado
+                ahora no se concatena el \n porque no se esta validando
+                ademas que causa problemas para realizar la conexion y deberia ser eliminado
+
+                */
                 //strcat(host,"\n");
                 break;
             case 'p':
@@ -97,7 +125,12 @@ int main(int argc, char **argv)
     rio_t rio;
     
     for(int i = 0;i<15;i++) buf[i] = '\0';
+    // se inicializa el buffer vacio
+
     /*
+    por si se quiere dejar que el usuario ingrese la ip del servidor por teclado
+    pero tambien hace falta el puerto, por eso mas conveniente dejarlo que se ingrese
+    por argumento del programa
     while(!val_ip(host)){
         printf("Input the server ip: ");
         Fgets(host, 18, stdin);  
@@ -121,6 +154,11 @@ int main(int argc, char **argv)
             Rio_readlineb(&rio, buf, MAXLINE);
             Fputs(buf, stdout);
         }else{
+            /*
+            si es que lo ingresado no es valido
+            se limpia el buffer y posible texto que haya quedado en espera por solo leer
+            15 caracteres a la vez
+            */
             if (!strchr(buf, '\n')) {
                 int ch;
                 while (((ch = getchar()) != EOF) && (ch != '\n'));

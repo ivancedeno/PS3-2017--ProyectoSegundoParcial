@@ -10,6 +10,11 @@ struct config *read_config_file(char *filename){
 	if(fd<0){
 		return NULL;
 	}
+	/*
+
+	proceso muy similar al de leer la hashtable se leen lineas y si se ecuentra algo relevante se lo lee
+	y asigna a la estructura que contiene la informacion
+	*/
 
 	rio_readinitb(&rio, fd);
 	struct config *con = (struct config *) malloc(sizeof(struct config));
